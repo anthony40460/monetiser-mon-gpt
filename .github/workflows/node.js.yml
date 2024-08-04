@@ -1,0 +1,32 @@
+name: Node.js CI/CD                                                                                                │
+│                                                                                                                     │
+│  on:                                                                                                                │
+│    push:                                                                                                            │
+│      branches: [ main ]  # Ajustez ceci si votre branche principale a un nom différent                              │
+│    pull_request:                                                                                                    │
+│      branches: [ main ]  # Ajustez ceci si votre branche principale a un nom différent                              │
+│                                                                                                                     │
+│  jobs:                                                                                                              │
+│    build-and-deploy:                                                                                                │
+│      runs-on: ubuntu-latest                                                                                         │
+│                                                                                                                     │
+│      steps:                                                                                                         │
+│      - uses: actions/checkout@v2                                                                                    │
+│                                                                                                                     │
+│      - name: Use Node.js                                                                                            │
+│        uses: actions/setup-node@v2                                                                                  │
+│        with:                                                                                                        │
+│          node-version: '14'  # Vous pouvez ajuster la version de Node.js si nécessaire                              │
+│                                                                                                                     │
+│      - name: Install dependencies                                                                                   │
+│        run: npm ci                                                                                                  │
+│                                                                                                                     │
+│      - name: Build                                                                                                  │
+│        run: npm run build                                                                                           │
+│                                                                                                                     │
+│      - name: Deploy to GitHub Pages                                                                                 │
+│        uses: peaceiris/actions-gh-pages@v3                                                                          │
+│        if: github.ref == 'refs/heads/main'  # Assurez-vous que ceci correspond à votre branche principale           │
+│        with:                                                                                                        │
+│          github_token: ${{ secrets.GITHUB_TOKEN }}                                                                  │
+│          publish_dir: ./build  # Le dossier où votre application construite se trouve
